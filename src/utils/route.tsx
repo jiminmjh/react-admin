@@ -1,5 +1,4 @@
 import { Route } from "react-router-dom";
-import type { IRoute } from "@/types/global";
 
 const DynamicRoutes = (routes: IRoute[]) => {
   return routes.map((route) => (

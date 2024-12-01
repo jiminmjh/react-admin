@@ -71,12 +71,14 @@ declare module "*.scss" {
   export default classes;
 }
 
-declare module "*.css" {
-  const classes: { readonly [key: string]: string };
-  export default classes;
-}
+declare module "normalize.css";
 
 declare module "*.module.sass" {
   const classes: { readonly [key: string]: string };
   export default classes;
+}
+
+declare module "unplugin-auto-import/presets" {
+  export type Resolvers = object;
+  export const AntDesignResolvers: () => Resolvers;
 }

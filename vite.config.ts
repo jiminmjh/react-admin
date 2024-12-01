@@ -1,6 +1,8 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+//自动引入插件
+import AutoImport from "unplugin-auto-import/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,16 +10,22 @@ export default defineConfig({
     proxy: {
       "/api": {
         //todo 配置proxy - 后面改为后端服务端口
-        target: "http://localhost:3120/",
+        target: "http://127.0.0.1:8001/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    //减少 import 导入的插件
+    AutoImport({
+      imports: ["react"],
+    }),
+  ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-  }
+  },
 });

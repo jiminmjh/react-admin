@@ -1,6 +1,7 @@
+import styles from "./home.module.scss";
 const Home = () => (
   <>
-    <h1>Home Page</h1>
+    <div className={styles.home}>Home Page</div>
   </>
 );
 export default Home;
