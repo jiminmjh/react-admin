@@ -1,20 +1,20 @@
 import type { ReactNode } from "React";
 import "axios";
 
-declare global {
-  export type IRoute = {
+global {
+  interface IRoute {
     path: string;
-    element: ReactNode;
+    element: any;
     children?: { path: string; element: ReactNode }[];
-  };
+  }
+}
 
-  /**
-   * 给axios添加新的类型
-   */
-  declare module "axios" {
-    interface AxiosRequestConfig {
-      toast?: boolean;
-    }
+/**
+ * 给axios添加新的类型
+ */
+declare module "axios" {
+  interface AxiosRequestConfig {
+    toast?: boolean;
   }
 }
 
