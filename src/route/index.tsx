@@ -33,4 +33,5 @@ export const routes: IRoute[] = [
   }
 ];
 
+// 不需要权限验证的路由加入到这里
 export const NoRoleRoute = ["/login", "/404", "/403"];
