@@ -9,7 +9,7 @@ const initialState: IUserState = {
   refreshToken: storage.get("refreshToken") || "",
   info: null,
   perms: [],
-  menus: [],
+  menus: []
 };
 
 // 异步登录操作
@@ -52,7 +52,7 @@ const userSlice = createSlice({
       state.menus = [];
       storage.remove("token");
       storage.remove("refreshToken");
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserInfo.fulfilled, (state, { payload }) => {
@@ -60,7 +60,7 @@ const userSlice = createSlice({
       state.perms = payload.permmenu.perms;
       state.menus = payload.permmenu.menus;
     });
-  },
+  }
 });
 
 export const { setToken, logout } = userSlice.actions;
