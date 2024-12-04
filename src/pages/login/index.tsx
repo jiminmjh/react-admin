@@ -12,10 +12,6 @@ const formLayout = {
   wrapperCol: { span: 16 }
 };
 
-const colLayout = {
-  md: { span: 24 },
-  lg: { span: 24 }
-};
 function Login() {
   const [form] = Form.useForm();
   return (
@@ -24,7 +20,7 @@ function Login() {
         form={form}
         formList={formList}
         formLayout={formLayout}
-        colLayout={colLayout}
+        colSpan={24}
       />
       <h1>Login</h1>
     </div>

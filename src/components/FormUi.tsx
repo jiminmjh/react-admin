@@ -5,13 +5,12 @@ import { Form, Row, Col, Input, Select, DatePicker, FormInstance } from "antd";
 type IFormProp = {
   formList: IFormList[];
   form: FormInstance;
+  colSpan?: number; // 设置单个所占内容块（总24一行）、可以响应式md lg后期
   formLayout: Partial<IFormLayout>; // 设置label和输入框占位比例
   colFormLayout?: Partial<IFormLayout>; // 设置label和输入框占位比例
-  colSpan?: any;
   colOffset?: any;
-  colLayout?: Partial<IColLayout>; // 设置单个formList 内容占位
 };
-type IColLayout = { md: { span: number }; lg: { span: number } };
+
 type IFormLayout = {
   labelCol: { span?: number; offset?: number };
   wrapperCol: { span?: number; offset?: number };
@@ -24,10 +23,10 @@ type IFormList = {
   maxLength?: number;
   dict?: any[];
   render?: any;
-  collayout?: Partial<IColLayout>;
   colformLayout?: Partial<IFormLayout>;
   rules?: any;
   initialValue?: any;
+  colSpan?: number; // 当前内容所占内容宽度（总24一行）
 };
 
 const Option = Select.Option;
@@ -95,11 +94,7 @@ const FormUi = (props: IFormProp) => {
     return formList.map((ele: any, index) => {
       return (
         <Col
-          span={ele.colSpan}
-          {...((ele.collayout ? ele.collayout : props.colLayout) ?? {
-            md: { span: 12 },
-            lg: { span: 8 }
-          })}
+          span={ele.colSpan || props.colSpan || 8}
           offset={ele.colOffset}
           key={index}
         >
