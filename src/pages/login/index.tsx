@@ -1,4 +1,4 @@
-import { Form } from "antd";
+import { Form, Button } from "antd";
 import "./login.scss";
 import LoginForm from "./components/LoginForm";
 
@@ -6,8 +6,13 @@ function Login() {
   const [form] = Form.useForm();
   return (
     <div className="main">
+      <h1 style={{ textAlign: "center" }}>Login</h1>
       <LoginForm form={form} />
-      <h1>Login</h1>
+      <div className="button-group">
+        <Button className="submit" type="primary">
+          登陆
+        </Button>
+      </div>
     </div>
   );
 }

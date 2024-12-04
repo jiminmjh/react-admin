@@ -2,8 +2,21 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
-}
-
-.main {
-  width: 100%;
+  .main {
+    width: 100%;
+  }
+  .center {
+    margin: 0 auto;
+  }
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .button-group {
+    margin: 0 20px;
+    button {
+      margin: 0 10px;
+    }
+  }
 }

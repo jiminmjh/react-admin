@@ -1,6 +1,5 @@
 import FormUi from "@/components/FormUi";
 import { FormInstance } from "antd";
-import "./login.scss";
 
 type IFormProp = {
   form: FormInstance<{
@@ -9,17 +8,26 @@ type IFormProp = {
   }>;
 };
 
-const formList = [
-  { type: "input", label: "用户名", name: "username" },
-  { type: "input", label: "密码", name: "passwpd" }
-];
-
 const formLayout = {
   labelCol: { span: 8 }, // 标签占据8个网格
-  wrapperCol: { span: 16 }
+  wrapperCol: { span: 4 }
 };
 
 const LoginForm: React.FC<IFormProp> = ({ form }) => {
+  const refresh = () => {};
+
+  const formList = [
+    { type: "input", label: "用户名", name: "username" },
+    { type: "input", label: "密码", name: "passwpd" },
+    {
+      type: "slot",
+      label: "验证码",
+      name: "captcha",
+      render: () => (
+        <div className="captcha" onClick={refresh} v-html="html"></div>
+      )
+    }
+  ];
   return (
     <div className="main">
       <FormUi
@@ -28,7 +36,6 @@ const LoginForm: React.FC<IFormProp> = ({ form }) => {
         formLayout={formLayout}
         colSpan={24}
       />
-      <h1>LoginForm</h1>
     </div>
   );
 };
