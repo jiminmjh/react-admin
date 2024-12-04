@@ -11,11 +11,21 @@ const formLayout = {
   labelCol: { span: 8 }, // 标签占据8个网格
   wrapperCol: { span: 16 }
 };
+
+const colLayout = {
+  md: { span: 24 },
+  lg: { span: 24 }
+};
 function Login() {
   const [form] = Form.useForm();
   return (
     <div className="main">
-      <FormUi form={form} formList={formList} formLayout={formLayout} />
+      <FormUi
+        form={form}
+        formList={formList}
+        formLayout={formLayout}
+        colLayout={colLayout}
+      />
       <h1>Login</h1>
     </div>
   );

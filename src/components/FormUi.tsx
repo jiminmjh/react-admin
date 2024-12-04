@@ -1,39 +1,33 @@
 // FormUi M
-import React from "react";
-import { Form, Row, Col, Input, Select, DatePicker } from "antd";
-
-/**
- * prop
-      const form = {};
-      const formLayout = {};
-      const colFormLayout = {};
-      const colSpan = {};
-      const colOffset = {};
-      const name = '';
-      const label = '';
-      const type = '';
-      const maxLength = '';
-      const dict = {};
-      const render = () => {};
- */
+import React, { useMemo } from "react";
+import { Form, Row, Col, Input, Select, DatePicker, FormInstance } from "antd";
 
 type IFormProp = {
-  formList: {
-    type: string;
-    name: string;
-    label: string;
-    maxLength?: number;
-    dict?: any[];
-    render?: any;
-  }[];
-  form: any;
-  formLayout: {
-    labelCol: { span?: number; offset?: number };
-    wrapperCol: { span?: number; offset?: number };
-  };
-  colFormLayout?: any;
+  formList: IFormList[];
+  form: FormInstance;
+  formLayout: Partial<IFormLayout>; // 设置label和输入框占位比例
+  colFormLayout?: Partial<IFormLayout>; // 设置label和输入框占位比例
   colSpan?: any;
   colOffset?: any;
+  colLayout?: Partial<IColLayout>; // 设置单个formList 内容占位
+};
+type IColLayout = { md: { span: number }; lg: { span: number } };
+type IFormLayout = {
+  labelCol: { span?: number; offset?: number };
+  wrapperCol: { span?: number; offset?: number };
+};
+type IFormList = {
+  type: string;
+  name: string;
+  label: string;
+  dictType?: string;
+  maxLength?: number;
+  dict?: any[];
+  render?: any;
+  collayout?: Partial<IColLayout>;
+  colformLayout?: Partial<IFormLayout>;
+  rules?: any;
+  initialValue?: any;
 };
 
 const Option = Select.Option;
@@ -59,13 +53,19 @@ const FormUi = (props: IFormProp) => {
             placeholder={formItem.label}
             {...formItem}
           >
-            {formItem.dict.map((ele: any) => {
-              return (
-                <Option value={ele.data} key={ele.data}>
-                  {ele.label}
-                </Option>
-              );
-            })}
+            {useMemo(() => {
+              formItem.dictType && formItem.dictType === "obj"
+                ? Object.entries(formItem.dict).map((ele: any) => (
+                    <Option value={ele[0]} key={ele[0]}>
+                      {ele[1]}
+                    </Option>
+                  ))
+                : formItem.dict?.map((ele: any) => (
+                    <Option value={ele.data} key={ele.data}>
+                      {ele.label}
+                    </Option>
+                  ));
+            }, [formItem.dict])}
           </Select>
         );
       case "date":
@@ -96,8 +96,10 @@ const FormUi = (props: IFormProp) => {
       return (
         <Col
           span={ele.colSpan}
-          md={{ span: 12 }}
-          lg={{ span: 8 }}
+          {...((ele.collayout ? ele.collayout : props.colLayout) ?? {
+            md: { span: 12 },
+            lg: { span: 8 }
+          })}
           offset={ele.colOffset}
           key={index}
         >
@@ -105,8 +107,9 @@ const FormUi = (props: IFormProp) => {
             key={index}
             name={ele.name}
             label={ele.label}
-            {...ele.colFormLayout}
-            {...props.formLayout}
+            initialValue={ele.initialValue ?? null}
+            {...((ele.colformLayout ? ele.colformLayout : props.formLayout) ??
+              {})}
           >
             {renderItem(ele)}
           </Item>
