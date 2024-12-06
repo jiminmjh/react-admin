@@ -5,7 +5,7 @@ global {
   interface IRoute {
     path: string;
     element: any;
-    children?: { path: string; element: ReactNode }[];
+    children?: IRoute[];
   }
 }
 
