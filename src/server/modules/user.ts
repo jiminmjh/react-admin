@@ -9,7 +9,7 @@ export function loginAPI(data: any) {
 /*刷新token*/
 export function refreshTokenAPI(refreshToken: string) {
   return request.get<ILoginRes>("/admin/base/open/refreshToken", {
-    refreshToken,
+    refreshToken
   });
 }
 
@@ -22,5 +22,12 @@ export function getPerson() {
 export function getPermmenu() {
   return request.get<{ perms: string[]; menus: IMenuItem[] }>(
     "/admin/base/comm/permmenu"
+  );
+}
+
+/** 验证码获取 */
+export function getCaptcha() {
+  return request.get<{ captchaId: string; data: string }>(
+    "/admin/base/open/captcha"
   );
 }

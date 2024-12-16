@@ -1,3 +1,13 @@
 .submit {
   margin-left: 0;
 }
+
+.main {
+  width: 400px !important;
+  background: skyblue;
+  margin: 0 auto;
+  .ant-form {
+    width: 300px;
+    margin: 0 auto;
+  }
+}

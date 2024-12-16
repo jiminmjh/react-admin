@@ -2,6 +2,7 @@
 const Home = lazy(() => import("@/pages/home"));
 const Login = lazy(() => import("@/pages/login"));
 const Layout = lazy(() => import("@/pages/layout"));
+const Err403 = lazy(() => import("@/pages/error/403"));
 const Err404 = lazy(() => import("@/pages/error/404"));
 
 export const routes: IRoute[] = [
@@ -25,7 +26,7 @@ export const routes: IRoute[] = [
   },
   {
     path: "/403",
-    element: <Err404 />
+    element: <Err403 />
   },
   {
     path: "*",
