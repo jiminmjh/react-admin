@@ -1,26 +1,26 @@
-import store from "store2";
+import store from 'store2'
 
 class Storage {
   //后缀标识
-  suffix: string = "deadtime";
+  suffix: string = 'deadtime'
 
   /**
    * 获取
    * @param {string} key 关键字
    */
   get(key: string) {
-    return store.get(key);
+    return store.get(key)
   }
 
   /**
    * 获取全部
    */
   info() {
-    const d: any = {};
+    const d: any = {}
     store.each(function (key: any, value: any) {
-      d[key] = value;
-    });
-    return d;
+      d[key] = value
+    })
+    return d
   }
 
   /**
@@ -29,17 +29,11 @@ class Storage {
    * @param {*} value 值
    * @param {number} expires 过期时间，单位 秒
    */
-  set(key: string, value: any, expires?: number) {
-    if (expires) {
-      store.set(key, value);
+  set(key: string, value: any, expires?: any) {
+    store.set(key, value)
 
-      if (expires) {
-        //todo
-        store.set(
-          `${key}${this.suffix}`,
-          Date.parse(String(new Date())) + expires * 1000
-        );
-      }
+    if (expires) {
+      store.set(`${key}${this.suffix}`, Date.parse(String(new Date())) + expires * 1000)
     }
   }
 
@@ -48,7 +42,7 @@ class Storage {
    * @param {string} key 关键字
    */
   getExpiration(key: string) {
-    return this.get(key + this.suffix);
+    return this.get(key + this.suffix)
   }
 
   /**
@@ -56,9 +50,7 @@ class Storage {
    * @param key
    */
   isExpired(key: string) {
-    return (
-      (this.getExpiration(key) || 0) - Date.parse(String(new Date())) <= 2000
-    );
+    return (this.getExpiration(key) || 0) - Date.parse(String(new Date())) <= 2000
   }
 
   /**
@@ -66,7 +58,7 @@ class Storage {
    * @param key
    */
   removeExpiration(key: string) {
-    store.remove(key + this.suffix);
+    store.remove(key + this.suffix)
   }
 
   /**
@@ -74,16 +66,16 @@ class Storage {
    * @param key
    */
   remove(key: string) {
-    store.remove(key);
-    this.removeExpiration(key);
+    store.remove(key)
+    this.removeExpiration(key)
   }
 
   /**
    * 清理
    */
   clearAll() {
-    store.clearAll();
+    store.clearAll()
   }
 }
 
-export default new Storage();
+export default new Storage()

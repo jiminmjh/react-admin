@@ -55,7 +55,7 @@ const LoginForm = forwardRef<
       label: '验证码',
       name: 'verifyCode',
       placeholder: '请输入验证码',
-      render: () => (
+      render: (
         <div className='captcha-div'>
           <div className='captcha-input'>
             <Input placeholder='请输入验证码' />
@@ -67,7 +67,7 @@ const LoginForm = forwardRef<
   ].map(e => ({
     ...e,
     required: false,
-    validateStatus: '',
+    validatestatus: '',
     help: '' /* 自定义提示 */,
     rules: [{ required: true, message: e.placeholder }]
   }))

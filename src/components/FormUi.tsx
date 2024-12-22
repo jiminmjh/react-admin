@@ -1,6 +1,6 @@
-// FormUi M
+// FormUi
 import React, { useMemo } from 'react'
-import { Form, Row, Col, Input, Select, DatePicker, FormInstance } from 'antd'
+import { Form, Row, Col, Input, Select, DatePicker } from 'antd'
 import { IFormProp } from '@/types/component'
 
 const Option = Select.Option
@@ -34,7 +34,7 @@ const FormUi = (props: IFormProp) => {
       case 'text':
         return <TextArea placeholder={formItem.label} maxLength={formItem.maxLength} {...formItem} />
       case 'slot':
-        return formItem.render()
+        return formItem.render
       default:
         throw new Error(`${formItem.label} 表单格式异常！！！`)
     }

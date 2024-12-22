@@ -21,7 +21,7 @@ export type IFormList = {
   dictType?: string
   maxLength?: number
   dict?: any[]
-  render?: any
+  render?: JSX.Element
   colformLayout?: Partial<IFormLayout>
   rules?: any
   initialValue?: any

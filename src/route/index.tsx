@@ -1,38 +1,38 @@
 // 动态加载组件
-const Home = lazy(() => import("@/pages/home"));
-const Login = lazy(() => import("@/pages/login"));
-const Layout = lazy(() => import("@/pages/layout"));
-const Err403 = lazy(() => import("@/pages/error/403"));
-const Err404 = lazy(() => import("@/pages/error/404"));
+const Home = lazy(() => import('@/pages/home'))
+const Login = lazy(() => import('@/pages/login'))
+const Layout = lazy(() => import('@/pages/layout'))
+const Err403 = lazy(() => import('@/pages/error/403'))
+const Err404 = lazy(() => import('@/pages/error/404'))
 
 export const routes: IRoute[] = [
   {
-    path: "/",
+    path: '/',
     element: <Home />
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />
   },
   {
-    path: "/layout",
+    path: '/layout',
     element: <Layout />,
     children: [
       {
-        path: "",
+        path: '',
         element: <Login />
       }
     ]
   },
   {
-    path: "/403",
+    path: '/403',
     element: <Err403 />
   },
   {
-    path: "*",
+    path: '*',
     element: <Err404 />
   }
-];
+]
 
 // 不需要权限验证的路由加入到这里
-export const NoRoleRoute = ["/login", "/404", "/403"];
+export const NoRoleRoute = ['/login', '/404', '/403', '/']
