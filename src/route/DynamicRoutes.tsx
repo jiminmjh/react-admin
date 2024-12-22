@@ -1,47 +1,36 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/stores";
-import { routes, NoRoleRoute } from "./index";
-import storage from "@/utils/storage";
-const PrivateRoute = ({
-  path,
-  element
-}: {
-  path: string;
-  element: JSX.Element;
-}) => {
+import { Route, Routes, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/stores'
+import { routes, NoRoleRoute } from './index'
+import storage from '@/utils/storage'
+const PrivateRoute = ({ path, element }: { path: string; element: JSX.Element }) => {
   // 如果是无需权限的路由，直接渲染
   if (NoRoleRoute.includes(path)) {
-    return element;
+    return element
   }
-  const { menus } = useSelector((state: RootState) => state.user);
+  const { menus } = useSelector((state: RootState) => state.user)
   let userRoles = menus
-    .map((e) => {
-      if (e.type != 2) return e.router;
+    .map(e => {
+      if (e.type != 2) return e.router
     })
-    .filter((e) => e);
+    .filter(e => e)
   // 未登录跳转到登录页
-  const isAuthenticated = !!storage.get("token");
-  if (!isAuthenticated) return <Navigate to="/login" />;
+  const isAuthenticated = !!storage.get('token')
+  if (!isAuthenticated) return <Navigate to='/login' />
   // 权限校验
-  if (![...NoRoleRoute, ...userRoles].includes(path))
-    return <Navigate to="/403" />;
-  return element;
-};
+  if (![...NoRoleRoute, ...userRoles].includes(path)) return <Navigate to='/403' />
+  return element
+}
 
 const DynamicRoutes = () => {
   const renderRoutes = (routes: any[]) =>
     routes.map((route, index) => (
-      <Route
-        key={index}
-        path={route.path}
-        element={<PrivateRoute path={route.path} element={route.element} />}
-      >
+      <Route key={index} path={route.path} element={<PrivateRoute path={route.path} element={route.element} />}>
         {route.children && renderRoutes(route.children)}
       </Route>
-    ));
+    ))
 
-  return <Routes>{renderRoutes(routes)}</Routes>;
-};
+  return <Routes>{renderRoutes(routes)}</Routes>
+}
 
-export default DynamicRoutes;
+export default DynamicRoutes

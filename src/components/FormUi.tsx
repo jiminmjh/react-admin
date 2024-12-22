@@ -1,34 +1,7 @@
 // FormUi M
 import React, { useMemo } from 'react'
 import { Form, Row, Col, Input, Select, DatePicker, FormInstance } from 'antd'
-
-type IFormProp = {
-  formList: IFormList[]
-  form: FormInstance
-  colLayout: Partial<{ md: { span: number } | number; lg: { span: number } | number }> // 设置单个所占内容块（总24一行）、可以响应式md lg
-  formLayout: Partial<IFormLayout> // 设置label和输入框占位比例
-  colFormLayout?: Partial<IFormLayout> // 设置label和输入框占位比例
-  colOffset?: any
-}
-
-type IFormLayout = {
-  labelCol: { span?: number; offset?: number }
-  wrapperCol: { span?: number; offset?: number }
-  layout: 'horizontal' | 'vertical' | 'inline'
-}
-type IFormList = {
-  type: string
-  name: string
-  label: string
-  dictType?: string
-  maxLength?: number
-  dict?: any[]
-  render?: any
-  colformLayout?: Partial<IFormLayout>
-  rules?: any
-  initialValue?: any
-  colLayout?: Partial<{ md: { span: number } | number; lg: { span: number } | number }> // 设置单个所占内容块（总24一行）、可以响应式md lg
-}
+import { IFormProp } from '@/types/component'
 
 const Option = Select.Option
 const TextArea = Input.TextArea
@@ -76,6 +49,7 @@ const FormUi = (props: IFormProp) => {
           offset={ele.colOffset}
           key={index}>
           <Item
+            {...ele}
             key={index}
             name={ele.name}
             label={ele.label}

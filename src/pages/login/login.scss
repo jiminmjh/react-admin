@@ -1,13 +1,59 @@
-.submit {
-  margin-left: 0;
+.main {
+  display: flex;
+  background: #ffffff;
+  .left-login {
+    width: 50%;
+    background: url('@/static/bg.png') no-repeat center;
+    background-size: 100% 100%;
+  }
+  .right-login {
+    width: 44%;
+    height: 100%;
+    margin: 0 auto;
+    .right-form {
+      margin: 140px auto;
+      width: 352px;
+      height: 518px;
+      position: relative;
+      .submit {
+        width: 300px;
+        height: 44px;
+        position: absolute;
+        bottom: 60px;
+        left: 24px;
+      }
+      img {
+        width: 346px;
+        height: 52px;
+      }
+      .ant-form {
+        width: 300px;
+        margin: 50px auto;
+        label {
+          color: #606266;
+        }
+
+        .captcha-div {
+          width: 300px;
+          display: flex;
+          .captcha-input {
+            width: 50%;
+          }
+          .captcha {
+            background: #f8f8f8;
+            width: 50%;
+            height: 44px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
 }
 
-.main {
-  width: 400px !important;
-  background: skyblue;
-  margin: 0 auto;
-  .ant-form {
-    width: 300px;
-    margin: 0 auto;
-  }
+.ant-input,
+.ant-input-affix-wrapper {
+  height: 44px;
+  background: #f8f8f8;
+  border: none;
 }

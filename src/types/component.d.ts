@@ -1,34 +1,29 @@
-// //todo 假设你有两个组件 XtxSwiper 和 XtxGuess
-// export const XtxSwiper: FC = () => {
-//   return <div>XtxSwiper Component</div>;
-// };
+/* FormUi组件 */
 
-// export const XtxGuess: FC = () => {
-//   return <div>XtxGuess Component</div>;
-// };
+export type IFormProp = {
+  formList: IFormList[]
+  form: FormInstance
+  colLayout: Partial<{ md: { span: number } | number; lg: { span: number } | number }> // 设置单个所占内容块（总24一行）、可以响应式md lg
+  formLayout: Partial<IFormLayout> // 设置label和输入框占位比例
+  colFormLayout?: Partial<IFormLayout> // 设置label和输入框占位比例
+  colOffset?: any
+}
 
-// global.d.ts
-
-// import { FC } from "react";
-// declare global {
-//   namespace JSX {
-//     interface IntrinsicElements {
-//       XtxSwiper: React.DetailedHTMLProps<
-//         React.HTMLAttributes<HTMLElement>,
-//         HTMLElement
-//       >;
-//       XtxGuess: React.DetailedHTMLProps<
-//         React.HTMLAttributes<HTMLElement>,
-//         HTMLElement
-//       >;
-//     }
-//   }
-
-//   export interface GlobalComponents {
-//     XtxSwiper: FC;
-//     XtxGuess: FC;
-//   }
-// }
-
-// export type XtxSwiperInstance = React.ComponentType<typeof XtxSwiper>;
-// export type XtxGuessInstance = React.ComponentType<typeof XtxGuess>;
+export type IFormLayout = {
+  labelCol: { span?: number; offset?: number }
+  wrapperCol: { span?: number; offset?: number }
+  layout: 'horizontal' | 'vertical' | 'inline'
+}
+export type IFormList = {
+  type: string
+  name: string
+  label: string
+  dictType?: string
+  maxLength?: number
+  dict?: any[]
+  render?: any
+  colformLayout?: Partial<IFormLayout>
+  rules?: any
+  initialValue?: any
+  colLayout?: Partial<{ md: { span: number } | number; lg: { span: number } | number }> // 设置单个所占内容块（总24一行）、可以响应式md lg
+}
