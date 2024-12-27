@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/stores'
 import { routes, NoRoleRoute } from './index'
 import storage from '@/utils/storage'
+
 const PrivateRoute = React.memo(({ path, element }: { path: string; element: JSX.Element }) => {
   // 如果是无需权限的路由，直接渲染
   if (NoRoleRoute.includes(path) && path !== '/') {
@@ -17,10 +18,10 @@ const PrivateRoute = React.memo(({ path, element }: { path: string; element: JSX
     .filter(e => e)
   // 未登录跳转到登录页
   const isAuthenticated = !!storage.get('token')
-  if (!isAuthenticated) return <Navigate to='/login' />
+  if (!isAuthenticated) return <Navigate to="/login" />
   // 权限校验
   if (path == '/') return element
-  if (![...NoRoleRoute, ...userRoles].includes(path)) return <Navigate to='/403' />
+  if (![...NoRoleRoute, ...userRoles].includes(path)) return <Navigate to="/403" />
   return element
 })
 

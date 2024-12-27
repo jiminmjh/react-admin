@@ -5,7 +5,7 @@ import { login, fetchUserInfo } from '@/stores/user'
 import logo from '@/static/logo.png'
 import { store } from '@/stores'
 import { IRef } from '@/types/login'
-import './login.scss'
+import './login.less'
 
 function Login() {
   const [form] = Form.useForm()
@@ -28,14 +28,14 @@ function Login() {
     }
   }
   return (
-    <div className='main'>
-      <div className='left-login'></div>
+    <div className="main">
+      <div className="left-login"></div>
 
-      <div className='right-login'>
-        <div className='right-form'>
-          <img src={logo} alt='' />
+      <div className="right-login">
+        <div className="right-form">
+          <img src={logo} alt="" />
           <LoginForm form={form} ref={formRef} />
-          <Button className='submit' type='primary' onClick={submit}>
+          <Button className="submit" type="primary" onClick={submit}>
             登陆
           </Button>
         </div>
@@ -43,4 +43,5 @@ function Login() {
     </div>
   )
 }
+
 export default Login

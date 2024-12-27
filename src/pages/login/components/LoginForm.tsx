@@ -10,7 +10,6 @@ const formLayout: Partial<IFormLayout> = {
   wrapperCol: { span: 22 },
   layout: 'vertical'
 }
-
 const LoginForm = forwardRef<
   IRef,
   {
@@ -56,11 +55,11 @@ const LoginForm = forwardRef<
       name: 'verifyCode',
       placeholder: '请输入验证码',
       render: (
-        <div className='captcha-div'>
-          <div className='captcha-input'>
-            <Input placeholder='请输入验证码' />
+        <div className="captcha-div">
+          <div className="captcha-input">
+            <Input placeholder="请输入验证码" />
           </div>
-          <div className='captcha' onClick={refresh} dangerouslySetInnerHTML={{ __html: html }}></div>
+          <div className="captcha" onClick={refresh} dangerouslySetInnerHTML={{ __html: html }}></div>
         </div>
       )
     }
@@ -77,7 +76,7 @@ const LoginForm = forwardRef<
   }, [])
 
   return (
-    <div className='login-form'>
+    <div className="login-form">
       <FormUi form={form} formList={formList} formLayout={formLayout} colLayout={{ md: 24, lg: 24 }} />
     </div>
   )

@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Result } from "antd";
+import React from 'react'
+import { Button, Result } from 'antd'
 
 const App: React.FC = () => (
   <Result
@@ -8,6 +8,6 @@ const App: React.FC = () => (
     subTitle="Sorry, something went wrong."
     extra={<Button type="primary">Back Home</Button>}
   />
-);
+)
 
-export default App;
+export default App

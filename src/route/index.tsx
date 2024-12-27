@@ -1,5 +1,5 @@
 // 动态加载组件
-const Home = lazy(() => import('@/pages/home'))
+const Home = lazy(() => import('@/pages/home/index'))
 const Login = lazy(() => import('@/pages/login'))
 const Layout = lazy(() => import('@/pages/layout'))
 const Err403 = lazy(() => import('@/pages/error/403'))
@@ -7,20 +7,16 @@ const Err404 = lazy(() => import('@/pages/error/404'))
 
 export const routes: IRoute[] = [
   {
-    path: '/',
-    element: <Home />
-  },
-  {
     path: '/login',
     element: <Login />
   },
   {
-    path: '/layout',
+    path: '/',
     element: <Layout />,
     children: [
       {
-        path: '',
-        element: <Login />
+        path: '/',
+        element: <Home />
       }
     ]
   },

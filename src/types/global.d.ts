@@ -11,20 +11,6 @@ global {
     element: any
     children?: IRoute[]
   }
-  // /* 表单校验错误信息 */
-  // type IFormError = {
-  //   values: {
-  //     username: null | string
-  //     passwpd: null | string
-  //     captcha: null | string
-  //   }
-  //   errorFields: {
-  //     name: string
-  //     errors: string
-  //     warnings: string
-  //   }[]
-  //   outOfDate: boolean
-  // }
 }
 
 /**

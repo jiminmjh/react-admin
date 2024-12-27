@@ -38,9 +38,11 @@ class HttpRequest {
         if (storage.isExpired('token') && !storage.isExpired('refreshToken') && !config.url?.includes('refreshToken')) {
           if (!this.isRefreshing) {
             // 1.发送刷新 token 的请求
+            console.log('发送刷新TOKEN的请求')
             this.isRefreshing = true
             refreshTokenAPI(refreshToken).then(async result => {
               // 1.1更新 token，但是不要更新 refreshToken
+              console.log('刷新TOKEN完成', result)
               await store.dispatch(
                 setToken({
                   token: result.token,
