@@ -1,5 +1,7 @@
 /* FormUi组件 */
 
+import { FormInstance } from 'antd'
+
 export type IFormProp = {
   formList: IFormList[]
   form: FormInstance

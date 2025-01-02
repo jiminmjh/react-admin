@@ -6,26 +6,26 @@ import { IFormProp } from '@/types/component'
 const Option = Select.Option
 const TextArea = Input.TextArea
 const Item = Form.Item
-const FormUi = (props: IFormProp) => {
+const Index = (props: IFormProp) => {
   const renderItem = (formItem: any) => {
     switch (formItem.type) {
       case 'input':
         return <Input placeholder={formItem.label} allowClear maxLength={formItem.maxLength} {...formItem} />
       case 'select':
         return (
-          <Select style={{ width: '100%' }} optionFilterProp='children' placeholder={formItem.label} {...formItem}>
+          <Select style={{ width: '100%' }} optionFilterProp="children" placeholder={formItem.label} {...formItem}>
             {useMemo(() => {
               formItem.dictType && formItem.dictType === 'obj'
                 ? Object.entries(formItem.dict).map((ele: any) => (
-                    <Option value={ele[0]} key={ele[0]}>
-                      {ele[1]}
-                    </Option>
-                  ))
+                  <Option value={ele[0]} key={ele[0]}>
+                    {ele[1]}
+                  </Option>
+                ))
                 : formItem.dict?.map((ele: any) => (
-                    <Option value={ele.data} key={ele.data}>
-                      {ele.label}
-                    </Option>
-                  ))
+                  <Option value={ele.data} key={ele.data}>
+                    {ele.label}
+                  </Option>
+                ))
             }, [formItem.dict])}
           </Select>
         )
@@ -69,4 +69,4 @@ const FormUi = (props: IFormProp) => {
   )
 }
 
-export default React.memo(FormUi)
+export default React.memo(Index)

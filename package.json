@@ -14,6 +14,7 @@
     "@types/node": "^22.10.1",
     "antd": "^5.22.2",
     "axios": "1.6.7",
+    "components": "link:@/components",
     "less": "^4.2.1",
     "normalize.css": "^8.0.1",
     "react": "^18.3.1",

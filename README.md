@@ -25,4 +25,9 @@ ReferenceError: structuredClone is not defined" 表示node版本过低，请升�
 // "trailingComma": "none", // 在对象或数组最后一个元素后面是否加逗号
 // "arrowParens": "avoid" // 箭头函数参数只有一个时是否要有小括号 avoid: 省略括号
 
+## 自动变基
+- git config --global pull.rebase true
+- 保持git提交线 整齐性，可减少merge
+
+
 
