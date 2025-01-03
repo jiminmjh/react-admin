@@ -24,7 +24,7 @@ const LayoutPage: React.FC = () => {
 
 
   return (
-    <Layout className={styles.main}>
+    <Layout className={`${styles.main} bg`}>
       <Sider
         breakpoint="md"
         collapsedWidth="0"
@@ -47,10 +47,7 @@ const LayoutPage: React.FC = () => {
         <Header className={`${styles.header} theme-bg`}>
           <LayoutHeader sideWidth={sideWidth} setSideWidth={setSideWidth} />
         </Header>
-        <Content className="theme-bg" style={{
-          margin: '10px 10px 0',
-          overflowY: 'auto'
-        }}>
+        <Content className={`${styles.content} bg`}>
           <div
             style={{
               minHeight: 36,
@@ -61,8 +58,6 @@ const LayoutPage: React.FC = () => {
             <Outlet /> {/* 子路由渲染位置 */}
           </div>
         </Content>
-        {/*<Footer style={{ textAlign: 'center' }}>*/}
-        {/*</Footer>*/}
       </Layout>
     </Layout>
   )
