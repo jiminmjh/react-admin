@@ -41,13 +41,11 @@ class HttpRequest {
             console.log('发送刷新TOKEN的请求')
             this.isRefreshing = true
             refreshTokenAPI(refreshToken).then(async result => {
-              // 1.1更新 token，但是不要更新 refreshToken
+              // 1.1异步更新 token，但是不要更新 refreshToken
+              // 先执行下面 将当前请求放入 queq 队列
               console.log('刷新TOKEN完成', result)
               await store.dispatch(
-                setToken({
-                  token: result.token,
-                  refreshToken: result.refreshToken
-                })
+                setToken({ ...result, isChangeRefresh: false })
               )
 
               // 1.2重置isRefreshing
@@ -61,9 +59,9 @@ class HttpRequest {
             })
           }
 
-          //2.阻止当前请求的发出，将其追加到一个队列中
+          //2.阻止当前请求的发出，将其追加到一个队列
           return new Promise(resolve => {
-            this.queq.push(function (newToken) {
+            this.queq.push(function(newToken) {
               // 处理旧token
               config.headers.Authorization = newToken
               resolve(config)

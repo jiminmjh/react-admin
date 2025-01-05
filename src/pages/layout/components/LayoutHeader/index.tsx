@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import styles from './index.module.less'
-import { MenuFoldOutlined } from '@ant-design/icons'
-import { Switch } from 'antd'
-import { MoonOutlined, SunOutlined } from '@ant-design/icons'
+import { Switch, Avatar, Popover } from 'antd'
+import { MenuFoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
+import request from '@/utils/request.ts'
 
 type IHeaderProp = {
   sideWidth: number
@@ -11,9 +11,16 @@ type IHeaderProp = {
 
 const LayoutHeader: React.FC<IHeaderProp> = (props) => {
   const { sideWidth, setSideWidth } = props
+  const root = document.getElementById('root')
 
-  const changeSwitch = (e) => {
-    const root = document.getElementById('root')
+  const popoverContent = (
+    <div>
+      <p>个人中心</p>
+      <p>退出登陆</p>
+    </div>
+  )
+
+  const changeSwitch = async (e) => {
     if (e) {
       // 设置主色
       root.style.setProperty('--ant-primary-color', '#2c3142')
@@ -26,6 +33,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       root.style.setProperty('--bg-color', '#f7f7f7')
     }
   }
+
   return (
     <div className={`${styles.content} bg`}>
       {/*导航烂*/}
@@ -36,12 +44,19 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
         <i className="iconfont icon-dark"></i>
         <div className={styles['header-personal']}>
           <Switch
+            className="switch"
+            style={{ marginRight: 20 }}
             checkedChildren={<MoonOutlined style={{ fontSize: '8px' }} />}
             unCheckedChildren={<SunOutlined style={{ fontSize: '8px', transform: 'scale(0.8)' }} />}
             onChange={changeSwitch}
           />
+          <div>
+            <Popover content={popoverContent} trigger="click">
+              <span>管理员</span>
+              <Avatar style={{ marginLeft: 10 }} shape="square" icon={<UserOutlined />} />
+            </Popover>
+          </div>
         </div>
-
       </div>
       {/*历史纪录操作栏*/}
       <div className={`theme-bg ${styles.history}`}>历史记录</div>

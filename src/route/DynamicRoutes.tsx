@@ -29,6 +29,7 @@ const DynamicRoutes = () => {
   const renderRoutes = (routes: any[]) =>
     routes.map((route, index) => (
       <Route key={index} path={route.path} element={<PrivateRoute path={route.path} element={route.element} />}>
+        {/*递归多层子路由*/}
         {route.children && renderRoutes(route.children)}
       </Route>
     ))

@@ -1,7 +1,16 @@
-.content {
-  //background: #f7f7f7;
-  height: 110px;
+:global {
+  .ant-switch-inner {
+    margin-inline-start: -20px;
+    margin-top: -4px;
+  }
+  span[aria-label="menu-fold"] > svg {
+    font-size: 20px;
+    margin-left: 20px;
+  }
+}
 
+.content {
+  height: 110px;
   .nav {
     height: 60px;
     margin-bottom: 10px;
@@ -9,14 +18,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     .header-personal {
       margin-right: 30px;
-    }
-
-    svg {
-      font-size: 20px;
-      margin-left: 20px;
+      display: flex;
+      align-items: center;
     }
   }
 
@@ -28,12 +33,6 @@
 }
 
 
-:global {
-  .ant-switch-inner {
-    margin-inline-start: -20px;
-    margin-top: -4px;
-  }
-}
 
 
 

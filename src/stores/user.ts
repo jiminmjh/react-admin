@@ -2,8 +2,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import storage from '@/utils/storage'
 import { getPermmenu, getPerson, loginAPI } from '@/server'
-import { IUserState } from '@/types/user'
+import { ILoginRes, IMenuItem, IUserInfo, IUserState } from '@/types/user'
 import { ILoginParams } from '@/types/login'
+
+type ISetToken = ILoginRes & { isChangeRefresh: boolean }
+type IUserInfo = [person: IUserInfo, permmenu: { perms: string[]; menus: IMenuItem[] }]
 
 const initialState: IUserState = {
   token: storage.get('token') || '',
@@ -15,14 +18,14 @@ const initialState: IUserState = {
 
 // 异步登录操作
 export const login = createAsyncThunk('user/login', async (params: ILoginParams, { dispatch }) => {
-  const result = await loginAPI(params)
-  dispatch(setToken({ token: result.token, refreshToken: result.refreshToken }))
+  const result: ILoginRes = await loginAPI(params)
+  dispatch(setToken({ ...result, isChangeRefresh: true }))
   return result
 })
 
 // 异步获取用户信息
 export const fetchUserInfo = createAsyncThunk('user/get', async () => {
-  const [person, permmenu] = await Promise.all([getPerson(), getPermmenu()])
+  const [person, permmenu]: IUserInfo = await Promise.all([getPerson(), getPermmenu()])
   return { person, permmenu }
 })
 
@@ -30,12 +33,18 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<{ token: string; refreshToken: string }>) => {
-      const { token, refreshToken } = action.payload
+    setToken: (state, action: PayloadAction<ISetToken>) => {
+      const { token, refreshToken, expire, refreshExpire } = action.payload
+      // 写入token
       state.token = token
-      state.refreshToken = refreshToken
-      storage.set('token', token)
-      storage.set('refreshToken', refreshToken)
+      const isRefresh = action.payload.isChangeRefresh ?? true
+      isRefresh && (state.refreshToken = refreshToken)
+
+      // 写入本地存储
+      // storage.set('token', token, 5) // 自定义token到期时间 s
+      // storage.set('refreshToken', refreshToken, 50)
+      storage.set('token', token, expire)
+      storage.set('refreshToken', refreshToken, refreshExpire)
     },
     logout: state => {
       state.token = ''
@@ -48,7 +57,7 @@ const userSlice = createSlice({
     }
   },
   extraReducers: builder => {
-    builder.addCase(fetchUserInfo.fulfilled, (state, { payload }) => {
+    builder.addCase(fetchUserInfo.fulfilled, (state: IUserState, { payload }) => {
       state.info = payload.person
       state.perms = payload.permmenu.perms
       state.menus = payload.permmenu.menus
