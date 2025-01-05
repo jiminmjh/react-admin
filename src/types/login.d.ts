@@ -1,7 +1,7 @@
 import LoginForm from '@/pages/login/components/LoginForm'
+
 export type IRef = {
-  refresh: () => void
-  captchaId: string
+  submit: () => void
 }
 
 export type ICaptcha = {

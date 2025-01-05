@@ -1,9 +1,12 @@
 import FormUi from '@/components/FormUi'
-import { Input, FormInstance } from 'antd'
+import { Input, FormInstance, message } from 'antd'
 import request from '@/utils/request'
 import { ICaptcha } from '@/types/login'
 import { IFormLayout } from '@/types/component'
 import { IRef } from '@/types/login'
+import { store } from '@/stores'
+import { fetchUserInfo, login } from '@/stores/user'
+import { useNavigate } from 'react-router-dom'
 
 const formLayout: Partial<IFormLayout> = {
   labelCol: { span: 24 }, // 标签占据8个网格
@@ -15,12 +18,15 @@ const LoginForm = forwardRef<
   {
     form: FormInstance<{
       username: string
-      passwpd: string
+      password: string
     }>
   }
 >(({ form }, ref) => {
   const [captchaId, setCaptchaId] = useState<string>('')
   const [html, setHtml] = useState('')
+  const { validateFields } = form
+  const navigate = useNavigate() // 获取导航函数
+
   const refresh = async () => {
     const result: ICaptcha = await request.get<{ captchaId: string; data: string }>('/admin/base/open/captcha', {
       width: 150,
@@ -31,10 +37,23 @@ const LoginForm = forwardRef<
     setCaptchaId(result.captchaId)
   }
 
-  useImperativeHandle(ref, () => ({
-    refresh,
-    captchaId
-  }))
+  const submit = async () => {
+    try {
+      const values = await validateFields()
+      const res: any = await store.dispatch(login({ ...values, captchaId: captchaId }))
+      if (!res.payload) return
+      message.success('登录成功')
+      // 登陆成功获取用户信息
+      await store.dispatch(fetchUserInfo())
+      navigate('/')
+    } catch (e: any) {
+      message.error(e?.errorFields?.[0].errors[0])
+    } finally {
+      await refresh()
+    }
+  }
+
+  useImperativeHandle(ref, () => ({ submit }))
 
   const formList = [
     {
@@ -55,7 +74,9 @@ const LoginForm = forwardRef<
       name: 'verifyCode',
       placeholder: '请输入验证码',
       render: (
-        <div className="captcha-div">
+        <div className="captcha-div" onKeyUp={e => {
+          if (e.key === 'Enter') submit()
+        }}>
           <div className="captcha-input">
             <Input placeholder="请输入验证码" />
           </div>

@@ -2,7 +2,8 @@ import React, { Dispatch, SetStateAction } from 'react'
 import styles from './index.module.less'
 import { Switch, Avatar, Popover } from 'antd'
 import { MenuFoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
-import request from '@/utils/request.ts'
+import { logout } from '@/stores/user.ts'
+import { store } from '@/stores'
 
 type IHeaderProp = {
   sideWidth: number
@@ -13,10 +14,14 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
   const { sideWidth, setSideWidth } = props
   const root = document.getElementById('root')
 
+  const loginOut = () => {
+    store.dispatch(logout())
+  }
+
   const popoverContent = (
     <div>
       <p>个人中心</p>
-      <p>退出登陆</p>
+      <p onClick={loginOut}>退出登陆</p>
     </div>
   )
 
