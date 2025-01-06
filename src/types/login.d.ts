@@ -1,5 +1,3 @@
-import LoginForm from '@/pages/login/components/LoginForm'
-
 export type IRef = {
   submit: () => void
 }

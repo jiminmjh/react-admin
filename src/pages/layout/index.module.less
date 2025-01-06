@@ -32,10 +32,8 @@
     }
   }
 
-
   .sider {
     background: #2f3447;
-
     .menu {
       background: #2f3447;
     }
@@ -49,14 +47,22 @@
 
 }
 
-
 :global(.ant-menu-item):hover {
   background: #4165d7 !important;
 }
 
-:global(.ant-menu-item-selected) {
-  background: #4165d7 !important;
+:global {
+  .ant-menu-item-selected {
+    background: #4165d7 !important;
+    color: white;
+  }
+
+  ul[role="menu"] {
+    background: #2f3447 !important;
+  }
 }
+
+
 
 
 

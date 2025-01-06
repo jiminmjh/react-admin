@@ -1,13 +1,13 @@
-import React from "react";
-import { Button, Result } from "antd";
-import { useNavigate } from "react-router-dom";
+import React from 'react'
+import { Button, Result } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const App: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const goHome = () => {
     //todo 后期优化根据用户是否有home页面权限进行跳转
-    navigate("/login");
-  };
+    navigate('/')
+  }
   return (
     <Result
       status="403"
@@ -19,7 +19,7 @@ const App: React.FC = () => {
         </Button>
       }
     />
-  );
-};
+  )
+}
 
-export default App;
+export default App

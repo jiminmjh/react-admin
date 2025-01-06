@@ -2,8 +2,6 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import { message } from 'antd'
 import storage from '@/utils/storage'
 import { refreshTokenAPI } from '@/server'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { RootState, AppDispatch } from '@/stores'
 import { store } from '@/stores'
 import { setToken } from '@/stores/user'
 

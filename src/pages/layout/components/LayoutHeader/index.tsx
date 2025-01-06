@@ -1,9 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react'
-import styles from './index.module.less'
+import { useNavigate } from 'react-router-dom'
+
 import { Switch, Avatar, Popover } from 'antd'
 import { MenuFoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
 import { logout } from '@/stores/user.ts'
 import { store } from '@/stores'
+import styles from './index.module.less'
 
 type IHeaderProp = {
   sideWidth: number
@@ -11,6 +13,7 @@ type IHeaderProp = {
 }
 
 const LayoutHeader: React.FC<IHeaderProp> = (props) => {
+  const navigate = useNavigate()
   const { sideWidth, setSideWidth } = props
   const root = document.getElementById('root')
 
@@ -20,7 +23,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
 
   const popoverContent = (
     <div>
-      <p>个人中心</p>
+      <p onClick={() => navigate('/sys/user')}>个人中心</p>
       <p onClick={loginOut}>退出登陆</p>
     </div>
   )

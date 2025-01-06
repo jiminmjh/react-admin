@@ -4,24 +4,44 @@ import { Layout, Menu, theme } from 'antd'
 import { Outlet } from 'react-router-dom'
 import styles from './index.module.less'
 import LayoutHeader from './components/LayoutHeader'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/stores'
+import { deepTree } from '@/utils'
 
 const { Header, Content, Footer, Sider } = Layout
 
-let items: any = [UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-  (icon, index) => ({
-    key: String(index + 1),
-    icon: React.createElement(icon),
-    label: `nav ${index + 1}`
-  })
-)
-
-
 const LayoutPage: React.FC = () => {
+  const [menuList, setMenuList] = useState([])
   const [sideWidth, setSideWidth] = useState(254)
   const {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
+  const { menus } = useSelector((state: RootState) => state.user)
+
+  /*
+  * 递归获取菜单 Menu类型 数组
+  */
+  const getMenuItem = (item) => {
+    return item.map(e => {
+      const { icon, name, children, id } = e
+      if (name === '首页') return
+      const obj: any = {
+        key: id,
+        icon: '',
+        label: name,
+        children: children && children.length ? getMenuItem(children) : undefined
+      }
+      return obj
+    })
+  }
+
+  useEffect(() => {
+    const list = deepTree(menus)
+    console.log('getMenuItem(list)', getMenuItem(list))
+
+    setMenuList(getMenuItem(list))
+  }, [menus])
 
   return (
     <Layout className={`${styles.main} bg`}>
@@ -41,7 +61,7 @@ const LayoutPage: React.FC = () => {
           <img src="https://show.cool-admin.com/logo.png" alt="" />
           {sideWidth === 254 && <div className={styles.text}>MY-ADMIN</div>}
         </div>
-        <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+        <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['4']} items={menuList} />
       </Sider>
       <Layout>
         <Header className={`${styles.header} theme-bg`}>
@@ -63,4 +83,4 @@ const LayoutPage: React.FC = () => {
   )
 }
 
-export default LayoutPage
+export default (LayoutPage)

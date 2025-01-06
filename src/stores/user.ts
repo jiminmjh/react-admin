@@ -4,9 +4,18 @@ import storage from '@/utils/storage'
 import { getPermmenu, getPerson, loginAPI } from '@/server'
 import { ILoginRes, IMenuItem, IUserInfo, IUserState } from '@/types/user'
 import { ILoginParams } from '@/types/login'
+import { persistStore, persistReducer } from 'redux-persist'
+import storageEngine from 'redux-persist/lib/storage' // 使用 localStorage 作为存储引擎
 
 type ISetToken = ILoginRes & { isChangeRefresh: boolean }
 type IUserInfo = [person: IUserInfo, permmenu: { perms: string[]; menus: IMenuItem[] }]
+
+// 配置 redux-persist 的持久化设置
+const persistConfig = {
+  key: 'user',                // 持久化存储的 key
+  storage: storageEngine,     // 使用 localStorage 进行存储
+  whitelist: ['info', 'perms', 'menus'] // 需要持久化的字段
+}
 
 const initialState: IUserState = {
   token: storage.get('token') || '',
@@ -66,4 +75,5 @@ const userSlice = createSlice({
 })
 
 export const { setToken, logout } = userSlice.actions
-export default userSlice.reducer
+// 使用 persistReducer 包装 userSlice.reducer
+export default persistReducer(persistConfig, userSlice.reducer)
