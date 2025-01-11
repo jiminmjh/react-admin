@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 import { Layout, Menu, theme } from 'antd'
 import { Outlet } from 'react-router-dom'
 import styles from './index.module.less'
 import LayoutHeader from './components/LayoutHeader'
+import { menuMaxWidth } from '@/comom/readonly'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/stores'
 import { deepTree } from '@/utils'
+import { DropboxOutlined } from '@ant-design/icons'
 
 const { Header, Content, Footer, Sider } = Layout
 
 const LayoutPage: React.FC = () => {
+  const navigator = useNavigate()
   const [menuList, setMenuList] = useState([])
-  const [sideWidth, setSideWidth] = useState(254)
+  const [sideWidth, setSideWidth] = useState(menuMaxWidth)
   const {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
@@ -24,22 +27,28 @@ const LayoutPage: React.FC = () => {
   */
   const getMenuItem = (item) => {
     return item.map(e => {
-      const { icon, name, children, id } = e
-      if (name === '首页') return
+      const { icon, name, router, children, id } = e
+      if (name === '首页' || !e) return
       const obj: any = {
         key: id,
-        icon: '',
+        icon: <DropboxOutlined />,
         label: name,
+        router,
         children: children && children.length ? getMenuItem(children) : undefined
       }
       return obj
     })
   }
 
-  useEffect(() => {
-    const list = deepTree(menus)
-    console.log('getMenuItem(list)', getMenuItem(list))
+  const changeMenu = (e) => {
+    const route: string = menus.find(item => e.key == item.id)?.router
+    navigator(route)
+  }
 
+  useEffect(() => {
+    const menuList = menus.filter(e => e.type != 2)
+    const list = deepTree(menuList)
+    console.log('menus', getMenuItem(list))
     setMenuList(getMenuItem(list))
   }, [menus])
 
@@ -59,9 +68,11 @@ const LayoutPage: React.FC = () => {
       >
         <div className={styles.logo}>
           <img src="https://show.cool-admin.com/logo.png" alt="" />
-          {sideWidth === 254 && <div className={styles.text}>MY-ADMIN</div>}
+          {sideWidth === menuMaxWidth && <div className={styles.text}>MY-ADMIN</div>}
         </div>
-        <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['4']} items={menuList} />
+        <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['']} items={menuList}
+              expandIcon={sideWidth === menuMaxWidth} // 隐藏下拉箭头
+              onClick={changeMenu} />
       </Sider>
       <Layout>
         <Header className={`${styles.header} theme-bg`}>
@@ -83,4 +94,4 @@ const LayoutPage: React.FC = () => {
   )
 }
 
-export default (LayoutPage)
+export default React.memo(LayoutPage)

@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
-
 import { Switch, Avatar, Popover } from 'antd'
 import { MenuFoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
+import { menuMinWidth, menuMaxWidth } from '@/comom/readonly'
 import { logout } from '@/stores/user.ts'
 import { store } from '@/stores'
 import styles from './index.module.less'
@@ -23,7 +23,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
 
   const popoverContent = (
     <div>
-      <p onClick={() => navigate('/sys/user')}>个人中心</p>
+      <p onClick={() => navigate('/sys/person')}>个人中心</p>
       <p onClick={loginOut}>退出登陆</p>
     </div>
   )
@@ -47,7 +47,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       {/*导航烂*/}
       <div className={`${styles.nav} theme-bg`}>
         <MenuFoldOutlined onClick={() =>
-          sideWidth === 254 ? setSideWidth(48) : setSideWidth(254)
+          sideWidth === menuMaxWidth ? setSideWidth(menuMinWidth) : setSideWidth(menuMaxWidth)
         } />
         <i className="iconfont icon-dark"></i>
         <div className={styles['header-personal']}>

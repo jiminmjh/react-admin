@@ -26,9 +26,13 @@
         "src/*"
       ]
     },
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // 关闭严格模式
+    "strict": false,
+    "noImplicitAny": false,
+    // 关闭未使用的本地变量报错
+    "noUnusedLocals": false,
+    // 关闭未使用的函数参数报错
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "allowSyntheticDefaultImports": true

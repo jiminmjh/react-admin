@@ -37,6 +37,24 @@ interface ModalProps {
  * 2. 内容区样式设置增强 - bodyStyle。
  * 3. 灵活的底部按钮配置
  * 4. 关闭后的额外操作 afterClose
+
+
+ /**
+ * 使用：
+ * <AbleDragModal
+ *   title="投后名单新增"
+ *   visible={true}
+ *   width={700}
+ *   bodyStyle={{ height: '400px' }}
+ *   onClose={() => {
+ *   }}
+ *   showConfirm="确认"
+ *   onSubmit={() => {
+ *   }}
+ *   showClose
+ * >
+ *      弹窗内容
+ * </AbleDragModal>
  **/
 
 /**

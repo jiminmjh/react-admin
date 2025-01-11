@@ -4,11 +4,11 @@ import storage from '@/utils/storage'
 import { getPermmenu, getPerson, loginAPI } from '@/server'
 import { ILoginRes, IMenuItem, IUserInfo, IUserState } from '@/types/user'
 import { ILoginParams } from '@/types/login'
-import { persistStore, persistReducer } from 'redux-persist'
+import { persistReducer } from 'redux-persist'
 import storageEngine from 'redux-persist/lib/storage' // 使用 localStorage 作为存储引擎
 
 type ISetToken = ILoginRes & { isChangeRefresh: boolean }
-type IUserInfo = [person: IUserInfo, permmenu: { perms: string[]; menus: IMenuItem[] }]
+type IUser = [person: IUserInfo, permmenu: { perms: string[]; menus: IMenuItem[] }]
 
 // 配置 redux-persist 的持久化设置
 const persistConfig = {
@@ -25,16 +25,21 @@ const initialState: IUserState = {
   menus: []
 }
 
+/** createAsyncThunk<Returned, ThunkArg, ThunkApiConfig>
+ •	Returned：异步操作成功时返回的数据类型。
+ •	ThunkArg：调用 thunk 时传入的参数类型（通常是 payload 的类型）。
+ •	ThunkApiConfig：可选，thunkAPI 的配置类型，默认是 {}。
+ **/
 // 异步登录操作
-export const login = createAsyncThunk('user/login', async (params: ILoginParams, { dispatch }) => {
-  const result: ILoginRes = await loginAPI(params)
+export const login = createAsyncThunk<ILoginRes, ILoginParams>('user/login', async (params, { dispatch }) => {
+  const result = await loginAPI(params)
   dispatch(setToken({ ...result, isChangeRefresh: true }))
   return result
 })
 
 // 异步获取用户信息
-export const fetchUserInfo = createAsyncThunk('user/get', async () => {
-  const [person, permmenu]: IUserInfo = await Promise.all([getPerson(), getPermmenu()])
+export const fetchUserInfo = createAsyncThunk<IUser>('user/get', async () => {
+  const [person, permmenu] = await Promise.all([getPerson(), getPermmenu()])
   return { person, permmenu }
 })
 
