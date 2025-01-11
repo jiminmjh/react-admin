@@ -2,7 +2,7 @@
 const Home = lazy(() => import('@/pages/home/index'))
 const Login = lazy(() => import('@/pages/login'))
 const Layout = lazy(() => import('@/pages/layout'))
-const Person = lazy(() => import('@/pages/home/sys/personalCenter'))
+const Person = lazy(() => import('@/pages/home/sys/person'))
 const User = lazy(() => import('@/pages/home/sys/user'))
 const Menu = lazy(() => import('@/pages/home/sys/menu'))
 const Role = lazy(() => import('@/pages/home/sys/role'))

@@ -45,6 +45,7 @@ export type IUserState = {
   info: IUserInfo | null;
   perms: string[];
   menus: IMenuItem[];
+  tags: Partial<IRouteObj>[]
 };
 
 export type IRouteObj = {

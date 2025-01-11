@@ -6,18 +6,22 @@ import styles from './index.module.less'
 import LayoutHeader from './components/LayoutHeader'
 import { menuMaxWidth } from '@/comom/readonly'
 import { useSelector } from 'react-redux'
-import { RootState } from '@/stores'
-import { deepTree } from '@/utils'
+import { RootState, store } from '@/stores'
+import { deepTree, getClickMenuTags } from '@/utils'
 import { DropboxOutlined } from '@ant-design/icons'
 import { IRouteObj } from '@/types/user'
+import { setTags } from '@/stores/user.ts'
+import cloneDeep from 'lodash/cloneDeep'
+
 const { Header, Content, Footer, Sider } = Layout
 
 const LayoutPage: React.FC = () => {
   const navigator = useNavigate()
   const [menuList, setMenuList] = useState([])
-  const [openPage, setOpenPage] = useState<Partial<IRouteObj>[]>([]) // 打开页面合集
   const [sideWidth, setSideWidth] = useState(menuMaxWidth)
   const activeMenu = useRef<number>(0)
+
+  const { tags } = useSelector((state: RootState) => state.user)
 
   const {
     token: { colorBgContainer, borderRadiusLG }
@@ -47,21 +51,10 @@ const LayoutPage: React.FC = () => {
     let obj: any = menus.find(item => e.key == item.id)
     navigator(obj?.router)
     activeMenu.current = obj?.id
-    // 是否增加历史纪录标签
-    setOpenPage(prev => {
-      let arr: Partial<IRouteObj>[] = [...prev]
-      const flag = prev.find(e => e.id === obj.id)
-      if (flag) {
-        arr = arr.map(e => {
-          e.active = e.id === flag.id
-          return e
-        })
-      } else {
-        arr = arr.map(e => ({ ...e, active: false }));
-        (obj = { ...obj, active: true }) && arr.push(obj)
-      }
-      return arr
-    })
+    
+    // 增加历史纪录标签
+    const arr = getClickMenuTags(tags, obj)
+    store.dispatch(setTags(arr))
   }
 
   useEffect(() => {
@@ -96,8 +89,7 @@ const LayoutPage: React.FC = () => {
       </Sider>
       <Layout>
         <Header className={`${styles.header} theme-bg`}>
-          <LayoutHeader sideWidth={sideWidth} setSideWidth={setSideWidth} openPage={openPage} setOpenPage={setOpenPage}
-                        activeMenu={activeMenu} />
+          <LayoutHeader sideWidth={sideWidth} setSideWidth={setSideWidth} activeMenu={activeMenu} />
         </Header>
         <Content className={`${styles.content} bg`}>
           <div

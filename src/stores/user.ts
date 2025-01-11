@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import storage from '@/utils/storage'
 import { getPermmenu, getPerson, loginAPI } from '@/server'
-import { ILoginRes, IMenuItem, IUserInfo, IUserState } from '@/types/user'
+import { ILoginRes, IMenuItem, IRouteObj, IUserInfo, IUserState } from '@/types/user'
 import { ILoginParams } from '@/types/login'
 import { persistReducer } from 'redux-persist'
 import storageEngine from 'redux-persist/lib/storage' // 使用 localStorage 作为存储引擎
@@ -22,7 +22,8 @@ const initialState: IUserState = {
   refreshToken: storage.get('refreshToken') || '',
   info: null,
   perms: [],
-  menus: []
+  menus: [],
+  tags: []
 }
 
 /** createAsyncThunk<Returned, ThunkArg, ThunkApiConfig>
@@ -66,10 +67,15 @@ const userSlice = createSlice({
       state.info = null
       state.perms = []
       state.menus = []
+      state.tags = []
       storage.remove('token')
       storage.remove('refreshToken')
+    },
+    setTags: (state, action: PayloadAction<Partial<IRouteObj>[]>) => {
+      state.tags = action.payload
     }
   },
+
   extraReducers: builder => {
     builder.addCase(fetchUserInfo.fulfilled, (state: IUserState, { payload }) => {
       state.info = payload.person
@@ -79,6 +85,6 @@ const userSlice = createSlice({
   }
 })
 
-export const { setToken, logout } = userSlice.actions
+export const { setToken, logout, setTags } = userSlice.actions
 // 使用 persistReducer 包装 userSlice.reducer
 export default persistReducer(persistConfig, userSlice.reducer)
