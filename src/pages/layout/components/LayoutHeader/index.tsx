@@ -1,20 +1,34 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Switch, Avatar, Popover } from 'antd'
-import { MenuFoldOutlined, MoonOutlined, SunOutlined, UserOutlined } from '@ant-design/icons'
+import { Switch, Avatar, Popover, Flex, Tag } from 'antd'
 import { menuMinWidth, menuMaxWidth } from '@/comom/readonly'
 import { logout } from '@/stores/user.ts'
 import { store } from '@/stores'
 import styles from './index.module.less'
+import {
+  MenuFoldOutlined,
+  MoonOutlined,
+  SunOutlined,
+  UserOutlined,
+  LeftOutlined,
+  RedoOutlined,
+  HomeOutlined,
+  CloseOutlined
+} from '@ant-design/icons'
+import { IRouteObj } from '@/types/user'
 
 type IHeaderProp = {
   sideWidth: number
+  openPage: Partial<IRouteObj>[]
+  setOpenPage: Dispatch<SetStateAction<Partial<IRouteObj>[]>>
   setSideWidth: Dispatch<SetStateAction<number>>
+  activeMenu: React.RefObject<number>
 }
 
 const LayoutHeader: React.FC<IHeaderProp> = (props) => {
+  const { sideWidth, setSideWidth, openPage, setOpenPage, activeMenu } = props
+  const [hoveredTag, setHoveredTag] = useState<number>()
   const navigate = useNavigate()
-  const { sideWidth, setSideWidth } = props
   const root = document.getElementById('root')
 
   const loginOut = () => {
@@ -28,6 +42,9 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
     </div>
   )
 
+  /*
+  * 暗黑模式转换
+  */
   const changeSwitch = async (e) => {
     if (e) {
       // 设置主色
@@ -40,6 +57,14 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       root.style.setProperty('--ant-bg-color-container', '#ffffff')
       root.style.setProperty('--bg-color', '#f7f7f7')
     }
+  }
+
+  const changeTag = (id: number) => {
+    setOpenPage(prev => prev.map(e => {
+        e.active = e.id === id
+        return e
+      })
+    )
   }
 
   return (
@@ -67,7 +92,35 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
         </div>
       </div>
       {/*历史纪录操作栏*/}
-      <div className={`theme-bg ${styles.history}`}>历史记录</div>
+      <div className={`theme-bg ${styles.history}`}>
+        <div className={`flex-around ${styles.operate}`}>
+          <LeftOutlined />
+          <RedoOutlined />
+          <HomeOutlined onClick={() => navigate('/')} />
+        </div>
+        <div className={styles.tag}>
+          <Flex gap="4px 0" wrap onMouseLeave={() => setHoveredTag(null)}>
+            {
+              openPage.map((item: IRouteObj) =>
+                <Tag
+                  bordered={false}
+                  key={item.id}
+                  color={(openPage.find(e => e.active) ? item.active : activeMenu?.current === item.id) && '#4165d7'}
+                  style={{ width: (item.active || hoveredTag === item.id || activeMenu?.current === item.id) ? 90 : 72 }}
+                  onMouseEnter={() => setHoveredTag(item.id)}
+                  onClick={() => changeTag(item.id)}>
+                  {item.name}
+                  {(item.active || hoveredTag) && (
+                    <CloseOutlined
+                      className="close-icon"
+                      onClick={() => setOpenPage(arr => arr.filter(e => e.id !== item.id))}
+                    />)}
+                </Tag>
+              )
+            }
+          </Flex>
+        </div>
+      </div>
     </div>
   )
 }

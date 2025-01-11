@@ -3,7 +3,7 @@
   height: 110px;
   .nav {
     height: 60px;
-    margin-bottom: 10px;
+    border-bottom: 1px solid #f2f6fc;
     width: 100%;
     display: flex;
     align-items: center;
@@ -14,11 +14,34 @@
       align-items: center;
     }
   }
-
   .history {
-    height: 30px;
+    height: 40px;
     background: #ffffff;
-    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    .operate {
+      height: 100%;
+      width: 100px;
+      span[role="img"] {
+        width: 26px;
+        height: 26px;
+        display: flex;
+        justify-content: center;
+      }
+      span[role="img"]:hover {
+        background: #d4dded;
+      }
+    }
+    .tag {
+      margin-left: 10px;
+      span {
+        width: 72px;
+        height: 30px;
+        font-size: 14px;
+        text-align: center;
+        line-height: 30px;
+      }
+    }
   }
 }
 
@@ -27,7 +50,7 @@
     margin-inline-start: 0;
     margin-top: 2px;
     svg {
-      font-size: 16px;
+      font-size: 12px;
     }
   }
   span[aria-label="menu-fold"] > svg {

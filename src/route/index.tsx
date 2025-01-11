@@ -4,6 +4,8 @@ const Login = lazy(() => import('@/pages/login'))
 const Layout = lazy(() => import('@/pages/layout'))
 const Person = lazy(() => import('@/pages/home/sys/personalCenter'))
 const User = lazy(() => import('@/pages/home/sys/user'))
+const Menu = lazy(() => import('@/pages/home/sys/menu'))
+const Role = lazy(() => import('@/pages/home/sys/role'))
 const Err403 = lazy(() => import('@/pages/error/403'))
 const Err404 = lazy(() => import('@/pages/error/404'))
 
@@ -27,6 +29,14 @@ export const routes: IRoute[] = [
       {
         path: '/sys/user', //用户列表
         element: <User />
+      },
+      {
+        path: '/sys/menu', //菜单列表
+        element: <Menu />
+      },
+      {
+        path: '/sys/role', //角色列表
+        element: <Role />
       }
     ]
   },

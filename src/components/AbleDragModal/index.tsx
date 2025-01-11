@@ -40,17 +40,15 @@ interface ModalProps {
 
 
  /**
- * 使用：
+ * 基础使用：
  * <AbleDragModal
  *   title="投后名单新增"
  *   visible={true}
  *   width={700}
  *   bodyStyle={{ height: '400px' }}
- *   onClose={() => {
- *   }}
+ *   onClose={() => {}}
  *   showConfirm="确认"
- *   onSubmit={() => {
- *   }}
+ *   onSubmit={() => {}}
  *   showClose
  * >
  *      弹窗内容

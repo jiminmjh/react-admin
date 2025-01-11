@@ -46,3 +46,21 @@ export type IUserState = {
   perms: string[];
   menus: IMenuItem[];
 };
+
+export type IRouteObj = {
+  id: number;
+  createTime: string;
+  updateTime: string;
+  parentId: number;
+  name: string;
+  router: string;
+  perms: any;
+  type: number;
+  icon: string;
+  orderNum: number;
+  viewPath: string;
+  keepAlive: boolean;
+  isShow: boolean;
+  active: boolean
+}
+
