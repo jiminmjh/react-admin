@@ -103,7 +103,24 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       // 删除标签
       const handleCloseClick = (e: React.MouseEvent) => {
         e.stopPropagation() // 阻止冒泡，避免触发父级 onClick
-        store.dispatch(setTags(tags.filter(e => e.id !== item.id)))
+        let arr = cloneDeep(tags)
+        if (arr.length === 1) {
+          store.dispatch(setTags([]))
+          navigate('/')
+          return
+        }
+        // 删除之后自动高亮下一个标签 - 如果是最后就高亮前一个
+        const currentIndex = arr.findIndex(e => e.id === item.id)
+        // 只有当前删除的是高亮元素，才执行。 否则会导致重复高亮
+        if (arr[currentIndex].active) {
+          const nextIndex = currentIndex + 1
+          const prevIndex = currentIndex - 1
+          const obj = arr.length === nextIndex ? arr[prevIndex] : arr[nextIndex]
+          obj.active = true
+          navigate(obj?.router)
+        }
+        arr = arr.filter(e => e.id !== item.id)
+        store.dispatch(setTags(arr))
       }
 
       return (

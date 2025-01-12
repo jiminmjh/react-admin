@@ -6,6 +6,10 @@ ReferenceError: structuredClone is not defined" 表示node版本过低，请升�
 3. 启动项目 pnpm run dev
 
 
+## webstorm 代码调试断点
+- 配置
+![img.png](img.png)
+
 ## 生产开发环境切换运行醒目
 1. env.development 和 .env.production 文件创建
 2. vite --mode development ｜ vite --mode production （package.json）
