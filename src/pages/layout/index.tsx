@@ -9,7 +9,6 @@ import { useSelector } from 'react-redux'
 import { RootState, store } from '@/stores'
 import { deepTree, getClickMenuTags } from '@/utils'
 import { DropboxOutlined } from '@ant-design/icons'
-import { IRouteObj } from '@/types/user'
 import { setTags } from '@/stores/user.ts'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -20,6 +19,7 @@ const LayoutPage: React.FC = () => {
   const [menuList, setMenuList] = useState([])
   const [sideWidth, setSideWidth] = useState(menuMaxWidth)
   const activeMenu = useRef<number>(0)
+  const historyList = useRef<number[]>([]) //存储高亮纪录，方便回退
 
   const { tags } = useSelector((state: RootState) => state.user)
 
@@ -49,11 +49,13 @@ const LayoutPage: React.FC = () => {
 
   const changeMenu = (e) => {
     let obj: any = menus.find(item => e.key == item.id)
-    navigator(obj?.router)
     activeMenu.current = obj?.id
-    
+
     // 增加历史纪录标签
+    if (!historyList.current) historyList.current = [obj.id]
+    else historyList.current.push(obj.id)
     const arr = getClickMenuTags(tags, obj)
+    navigator(obj?.router)
     store.dispatch(setTags(arr))
   }
 
@@ -62,8 +64,18 @@ const LayoutPage: React.FC = () => {
     const list = deepTree(menuList)
     console.log('menus', getMenuItem(list))
     setMenuList(getMenuItem(list))
-    return () => activeMenu.current = null
+    return () => {
+      activeMenu.current = null
+      historyList.current = null
+    }
   }, [menus])
+
+  useEffect(() => {
+    // 去除重复 tag 历史纪录
+    let arr = cloneDeep(historyList.current).reverse()
+    arr = [...new Set(arr)].reverse()
+    historyList.current = arr
+  }, [historyList.current])
 
   return (
     <Layout className={`${styles.main} bg`}>
@@ -89,7 +101,8 @@ const LayoutPage: React.FC = () => {
       </Sider>
       <Layout>
         <Header className={`${styles.header} theme-bg`}>
-          <LayoutHeader sideWidth={sideWidth} setSideWidth={setSideWidth} activeMenu={activeMenu} />
+          <LayoutHeader sideWidth={sideWidth} setSideWidth={setSideWidth} activeMenu={activeMenu}
+                        historyList={historyList} />
         </Header>
         <Content className={`${styles.content} bg`}>
           <div

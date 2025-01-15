@@ -23,11 +23,12 @@ import { getClickMenuTags } from '@/utils'
 type IHeaderProp = {
   sideWidth: number
   setSideWidth: Dispatch<SetStateAction<number>>
-  activeMenu: any//保存上一次点击菜单标签
+  activeMenu: any
+  historyList: any
 }
 
 const LayoutHeader: React.FC<IHeaderProp> = (props) => {
-  const { sideWidth, setSideWidth, activeMenu } = props
+  const { sideWidth, setSideWidth, activeMenu, historyList } = props
   const [hoveredTag, setHoveredTag] = useState<number>() //当前鼠标放在的标签id
   const navigate = useNavigate()
   const root = document.getElementById('root')
@@ -38,9 +39,9 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
   */
   const changeSwitch = async (e) => {
     if (e) {
-      // 设置主色
+// 设置主色
       root.style.setProperty('--ant-primary-color', '#2c3142')
-      // 设置容器背景
+// 设置容器背景
       root.style.setProperty('--ant-bg-color-container', '#2c3142')
       root.style.setProperty('--bg-color', '#2c3142')
     } else {
@@ -53,9 +54,10 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
   const loginOut = () => store.dispatch(logout())
 
   const handleUser = () => {
-    navigate('/sys/person')
     const obj = { id: 999, router: '/sys/person', name: '个人中心' }
     const arr = getClickMenuTags(tags, obj)
+    historyList.current?.push(obj.id)
+    navigate('/sys/person')
     store.dispatch(setTags(arr))
   }
 
@@ -66,16 +68,39 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
     </div>
   )
 
-  const changeTag = (item: IRouteObj) => {
+  /*
+  * tag便签切换
+  *  - 点击 传item
+  *  - 回退 传id
+  * */
+  const changeTag = (item?: IRouteObj, id?: number) => {
+    if (!item && !id) return
+    if (item) historyList.current?.push(item?.id)
+    let ids = id ? id : item?.id
     activeMenu.current = null
     let arr = cloneDeep(tags)
+    // 改变 active 控制高亮项
     arr = arr.map(e => {
-      e.active = e.id === item.id
+      e.active = e.id === ids
       return e
     })
     store.dispatch(setTags(arr))
     hoveredTag && setHoveredTag(undefined)
-    navigate(item.router)
+    const route = item ? item.router : tags.find(item => item.id === ids).router
+    navigate(route)
+
+  }
+
+  /*
+  *  导航标签回退
+  */
+  const back = () => {
+    const arr = cloneDeep(historyList.current) ?? []
+    const len = arr.length - 1
+    if (!len) return
+    arr.splice(-1, 1)
+    historyList.current = arr
+    changeTag(undefined, arr.findLast((e) => e))
   }
 
   const renderTag = useMemo(() => {
@@ -171,7 +196,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       {/*历史纪录操作栏*/}
       <div className={`theme-bg ${styles.history}`}>
         <div className={`flex-around ${styles.operate}`}>
-          <LeftOutlined />
+          <LeftOutlined onClick={back} />
           <RedoOutlined />
           <HomeOutlined onClick={() => navigate('/')} />
         </div>

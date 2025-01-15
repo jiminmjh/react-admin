@@ -14,7 +14,7 @@ type IUser = [person: IUserInfo, permmenu: { perms: string[]; menus: IMenuItem[]
 const persistConfig = {
   key: 'user',                // 持久化存储的 key
   storage: storageEngine,     // 使用 localStorage 进行存储
-  whitelist: ['info', 'perms', 'menus'] // 需要持久化的字段
+  whitelist: ['info', 'perms', 'menus', 'tags'] // 需要持久化的字段
 }
 
 const initialState: IUserState = {
