@@ -88,7 +88,6 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
     hoveredTag && setHoveredTag(undefined)
     const route = item ? item.router : tags.find(item => item.id === ids).router
     navigate(route)
-
   }
 
   /*
@@ -97,10 +96,11 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
   const back = () => {
     const arr = cloneDeep(historyList.current) ?? []
     const len = arr.length - 1
-    if (!len) return
-    arr.splice(-1, 1)
+    if (len === -1) return
+    const r = arr.splice(-1, 1)
+    console.log('r', r)
     historyList.current = arr
-    changeTag(undefined, arr.findLast((e) => e))
+    changeTag(undefined, len ? arr.findLast((e) => e) : r[0])
   }
 
   const renderTag = useMemo(() => {
@@ -128,6 +128,8 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       // 删除标签
       const handleCloseClick = (e: React.MouseEvent) => {
         e.stopPropagation() // 阻止冒泡，避免触发父级 onClick
+        // 删除当前元素历史纪录
+        historyList.current = historyList.current.filter(e => e !== item.id)
         let arr = cloneDeep(tags)
         if (arr.length === 1) {
           store.dispatch(setTags([]))

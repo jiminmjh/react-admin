@@ -72,8 +72,12 @@ const LayoutPage: React.FC = () => {
 
   useEffect(() => {
     // 去除重复 tag 历史纪录
-    let arr = cloneDeep(historyList.current).reverse()
-    arr = [...new Set(arr)].reverse()
+    let arr = cloneDeep(historyList.current)
+    arr = arr?.filter((e, i) => {
+      if (!i) return true
+      else if (e === arr[i - 1]) return false
+      return true
+    })
     historyList.current = arr
   }, [historyList.current])
 
