@@ -7,6 +7,7 @@ import { RootState, store } from '@/stores'
 import styles from './index.module.less'
 import { useSelector } from 'react-redux'
 import cloneDeep from 'lodash/cloneDeep'
+import { List } from 'immutable'
 import {
   MenuFoldOutlined,
   MoonOutlined,
@@ -130,7 +131,8 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
         e.stopPropagation() // 阻止冒泡，避免触发父级 onClick
         // 删除当前元素历史纪录
         historyList.current = historyList.current.filter(e => e !== item.id)
-        let arr = cloneDeep(tags)
+        // let arr = cloneDeep(tags)
+        let arr = List(tags).toJS()
         if (arr.length === 1) {
           store.dispatch(setTags([]))
           navigate('/')
