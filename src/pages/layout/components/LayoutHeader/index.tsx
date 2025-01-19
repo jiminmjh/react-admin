@@ -7,6 +7,7 @@ import { RootState, store } from '@/stores'
 import styles from './index.module.less'
 import { useSelector } from 'react-redux'
 import cloneDeep from 'lodash/cloneDeep'
+import _ from 'lodash'
 import { List } from 'immutable'
 import {
   MenuFoldOutlined,
@@ -34,6 +35,25 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
   const navigate = useNavigate()
   const root = document.getElementById('root')
   const { tags } = useSelector((state: RootState) => state.user)
+
+  useEffect(() => {
+    const tabsContainer = document.querySelector('#tag')
+    const tabsWrapper = document.querySelector('.ant-flex')
+    
+    tabsContainer.addEventListener('wheel', _.throttle(event => {
+      event.preventDefault() // 禁用浏览器的默认滚轮事件
+      const maxScrollLeft = (tabsWrapper.scrollWidth + 269) - tabsContainer.clientWidth
+      // 判断是否滚动到边界
+      if (event.deltaY > 0 && tabsWrapper.scrollLeft >= maxScrollLeft) {
+        console.log('已经到最右边')
+      } else if (event.deltaY < 0 && tabsWrapper.scrollLeft <= 0) {
+        console.log('已经到最左边', tabsWrapper.scrollLeft)
+      } else {
+        console.log('event.deltaY ', event.deltaY)
+        tabsWrapper.scrollLeft += event.deltaY
+      }
+    }, 60), { passive: false })
+  }, [])
 
   /*
   * 暗黑模式转换
@@ -204,8 +224,8 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
           <RedoOutlined />
           <HomeOutlined onClick={() => navigate('/')} />
         </div>
-        <div className={styles.tag}>
-          <Flex gap="4px 0" wrap>
+        <div className={styles.tag} id="tag">
+          <Flex gap="4px 0" wrap className={styles.flex}>
             {renderTag}
           </Flex>
         </div>

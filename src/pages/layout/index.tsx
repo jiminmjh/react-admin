@@ -20,6 +20,7 @@ const LayoutPage: React.FC = () => {
   const [sideWidth, setSideWidth] = useState(menuMaxWidth)
   const activeMenu = useRef<number>(0)
   const historyList = useRef<number[]>([]) //存储高亮纪录，方便回退
+  const [openKeys, setOpenKeys] = useState<string[]>([]) // 控制展开的子菜单
 
   const { tags } = useSelector((state: RootState) => state.user)
 
@@ -38,7 +39,9 @@ const LayoutPage: React.FC = () => {
       if (name === '首页' || !e) return
       const obj: any = {
         key: id,
-        icon: <DropboxOutlined />,
+        icon: <DropboxOutlined onClick={() => {
+          console.log('item', e)
+        }} />,
         label: name,
         router,
         children: children && children.length ? getMenuItem(children) : undefined
@@ -47,10 +50,18 @@ const LayoutPage: React.FC = () => {
     })
   }
 
+  // 禁止子菜单展开
+  const onOpenChange = (keys: string[]) => {
+    // 根据菜单宽度动态 - 收起子菜单
+    sideWidth === menuMaxWidth ? setOpenKeys(keys) : setOpenKeys([])
+  }
+
   const changeMenu = (e) => {
+    if (!openKeys.length) {
+      console.log('e', e)
+    }
     let obj: any = menus.find(item => e.key == item.id)
     activeMenu.current = obj?.id
-
     // 增加历史纪录标签
     if (!historyList.current) historyList.current = [obj.id]
     else historyList.current.push(obj.id)
@@ -101,7 +112,7 @@ const LayoutPage: React.FC = () => {
         </div>
         <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['']} items={menuList}
               expandIcon={sideWidth === menuMaxWidth} // 隐藏下拉箭头
-              onClick={changeMenu} />
+              onClick={changeMenu} openKeys={openKeys} onOpenChange={onOpenChange} />
       </Sider>
       <Layout>
         <Header className={`${styles.header} theme-bg`}>
