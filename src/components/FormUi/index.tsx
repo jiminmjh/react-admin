@@ -14,19 +14,19 @@ const Index = (props: IFormProp) => {
       case 'select':
         return (
           <Select style={{ width: '100%' }} optionFilterProp="children" placeholder={formItem.label} {...formItem}>
-            {useMemo(() => {
-              formItem.dictType && formItem.dictType === 'obj'
-                ? Object.entries(formItem.dict).map((ele: any) => (
-                  <Option value={ele[0]} key={ele[0]}>
-                    {ele[1]}
-                  </Option>
-                ))
-                : formItem.dict?.map((ele: any) => (
-                  <Option value={ele.data} key={ele.data}>
-                    {ele.label}
-                  </Option>
-                ))
-            }, [formItem.dict])}
+            {useMemo(() =>
+                formItem.dictType && formItem.dictType === 'obj'
+                  ? Object.entries(formItem.dict).map((ele: any) => (
+                    <Option value={ele[0]} key={ele[0]}>
+                      {ele[1]}
+                    </Option>
+                  ))
+                  : formItem.dict?.map((ele: any) => (
+                    <Option value={ele.data} key={ele.data}>
+                      {ele.label}
+                    </Option>
+                  ))
+              , [formItem.dict])}
           </Select>
         )
       case 'date':
