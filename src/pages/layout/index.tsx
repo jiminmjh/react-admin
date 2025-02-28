@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout, Menu, theme } from 'antd'
-import { Outlet } from 'react-router-dom'
 import styles from './index.module.less'
 import LayoutHeader from './components/LayoutHeader'
 import { menuMaxWidth } from '@/comom/readonly'
@@ -18,7 +17,7 @@ const LayoutPage: React.FC = () => {
   const navigator = useNavigate()
   const [menuList, setMenuList] = useState([])
   const [sideWidth, setSideWidth] = useState(menuMaxWidth)
-  const activeMenu = useRef<number>(0)
+  const activeMenu = useRef<number>(0) // 当前高亮菜单id
   const historyList = useRef<number[]>([]) //存储高亮纪录，方便回退
   const [openKeys, setOpenKeys] = useState<string[]>([]) // 控制展开的子菜单
 
@@ -110,14 +109,24 @@ const LayoutPage: React.FC = () => {
           <img src="https://show.cool-admin.com/logo.png" alt="" />
           {sideWidth === menuMaxWidth && <div className={styles.text}>MY-ADMIN</div>}
         </div>
-        <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['']} items={menuList}
+        <Menu className={styles.menu}
+              theme="dark"
+              mode="inline"
+              defaultSelectedKeys={['']}
+              items={menuList}
               expandIcon={sideWidth === menuMaxWidth} // 隐藏下拉箭头
-              onClick={changeMenu} openKeys={openKeys} onOpenChange={onOpenChange} />
+              onClick={changeMenu}
+              openKeys={openKeys}
+              onOpenChange={onOpenChange} />
       </Sider>
       <Layout>
         <Header className={`${styles.header} theme-bg`}>
-          <LayoutHeader sideWidth={sideWidth} setSideWidth={setSideWidth} activeMenu={activeMenu}
-                        historyList={historyList} />
+          <LayoutHeader
+            sideWidth={sideWidth}
+            setSideWidth={setSideWidth}
+            activeMenu={activeMenu}
+            historyList={historyList}
+            menuList={menuList} />
         </Header>
         <Content className={`${styles.content} bg`}>
           <div

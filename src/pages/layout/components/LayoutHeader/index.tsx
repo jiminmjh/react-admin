@@ -25,21 +25,29 @@ import { getClickMenuTags } from '@/utils'
 type IHeaderProp = {
   sideWidth: number
   setSideWidth: Dispatch<SetStateAction<number>>
-  activeMenu: any
-  historyList: any
+  activeMenu: React.RefObject<number>
+  historyList: React.RefObject<number[]>
+  menuList: unknown
 }
 
 const LayoutHeader: React.FC<IHeaderProp> = (props) => {
-  const { sideWidth, setSideWidth, activeMenu, historyList } = props
+  const { sideWidth, setSideWidth, activeMenu, historyList, menuList } = props
   const [hoveredTag, setHoveredTag] = useState<number>() //当前鼠标放在的标签id
+  const [names, setNames] = useState<string[]>([]) // 当前菜单嵌套名
   const navigate = useNavigate()
   const root = document.getElementById('root')
   const { tags } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
+    /**
+     * 推荐使用antd tab组件
+     * 因为antd tab组件有内置的滚动事件，可以直接使用
+     * 这里是自己实现的滚动事件，有点麻烦
+     * 但是antd tab组件的滚动事件有点问题
+     */
     const tabsContainer = document.querySelector('#tag')
     const tabsWrapper = document.querySelector('.ant-flex')
-    
+
     tabsContainer.addEventListener('wheel', _.throttle(event => {
       event.preventDefault() // 禁用浏览器的默认滚轮事件
       const maxScrollLeft = (tabsWrapper.scrollWidth + 269) - tabsContainer.clientWidth
@@ -47,7 +55,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       if (event.deltaY > 0 && tabsWrapper.scrollLeft >= maxScrollLeft) {
         console.log('已经到最右边')
       } else if (event.deltaY < 0 && tabsWrapper.scrollLeft <= 0) {
-        console.log('已经到最左边', tabsWrapper.scrollLeft)
+        // console.log('已经到最左边', tabsWrapper.scrollLeft)
       } else {
         console.log('event.deltaY ', event.deltaY)
         tabsWrapper.scrollLeft += event.deltaY
@@ -98,18 +106,23 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
     if (!item && !id) return
     if (item) historyList.current?.push(item?.id)
     let ids = id ? id : item?.id
-    activeMenu.current = null
     let arr = cloneDeep(tags)
     // 改变 active 控制高亮项
     arr = arr.map(e => {
       e.active = e.id === ids
       return e
     })
+    console.log('arr', arr)
     store.dispatch(setTags(arr))
     hoveredTag && setHoveredTag(undefined)
     const route = item ? item.router : tags.find(item => item.id === ids).router
-    navigate(route)
+    navigate(route);
+    (activeMenu.current as any) = id ?? item.id
   }
+
+  useEffect(() => {
+    console.log('activeMenu', activeMenu)
+  }, [activeMenu.current])
 
   /*
   *  导航标签回退
@@ -119,8 +132,8 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
     const len = arr.length - 1
     if (len === -1) return
     const r = arr.splice(-1, 1)
-    console.log('r', r)
-    historyList.current = arr
+    console.log('r', r);
+    (historyList.current as any) = arr
     changeTag(undefined, len ? arr.findLast((e) => e) : r[0])
   }
 
@@ -150,7 +163,7 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
       const handleCloseClick = (e: React.MouseEvent) => {
         e.stopPropagation() // 阻止冒泡，避免触发父级 onClick
         // 删除当前元素历史纪录
-        historyList.current = historyList.current.filter(e => e !== item.id)
+        ;(historyList.current as any) = historyList.current.filter(e => e !== item.id)
         // let arr = cloneDeep(tags)
         let arr = List(tags).toJS()
         if (arr.length === 1) {
@@ -193,13 +206,62 @@ const LayoutHeader: React.FC<IHeaderProp> = (props) => {
     })
   }, [hoveredTag, activeMenu.current, tags])
 
+  const getMenuListNames = (data) => {
+    setNames([])  // 清空 names 数组
+    return data.find(e => {
+      if (!e || !e.key) return false
+      const flag = e.key === activeMenu.current
+      if (flag) {
+        setNames(prev => [e.label, ...prev])
+        return true
+      } else {
+        // 递归调用，确保返回值正确
+        if (e.children) {
+          names.push(e.label)
+          setNames(prev => [...prev, e.label])
+          const result = getMenuListNames(e.children)
+          if (result) {
+            setNames(prev => [e.label, ...prev])
+            return true
+          }  // 如果递归找到，返回结果
+        }
+      }
+      return false  // 如果没有找到匹配的项，返回 false
+    })
+  }
+
+  useEffect(() => {
+    getMenuListNames(menuList)
+  }, [activeMenu.current])
+
+  useEffect(() => {
+    console.log('names', names)
+  }, [names])
+
   return (
     <div className={`${styles.content} bg`}>
       {/*导航烂*/}
       <div className={`${styles.nav} theme-bg`}>
-        <MenuFoldOutlined onClick={() =>
-          sideWidth === menuMaxWidth ? setSideWidth(menuMinWidth) : setSideWidth(menuMaxWidth)
-        } />
+        <div className="flex-center">
+          <MenuFoldOutlined onClick={() =>
+            sideWidth === menuMaxWidth ? setSideWidth(menuMinWidth) : setSideWidth(menuMaxWidth)
+          } />
+          {
+            names.map((e, i) => {
+              return (
+                <>
+                  <span style={{ marginLeft: 10 }}>{e} </span>
+                  {
+                    i != names.length - 1 ? (<span style={{ marginLeft: 10 }}>
+                    {'>'}
+                    </span>) : ''
+                  }
+                </>
+
+              )
+            })
+          }
+        </div>
         <i className="iconfont icon-dark"></i>
         <div className={styles['header-personal']}>
           <Switch

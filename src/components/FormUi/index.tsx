@@ -10,7 +10,7 @@ const Index = (props: IFormProp) => {
   const renderItem = (formItem: any) => {
     switch (formItem.type) {
       case 'input':
-        return <Input placeholder={formItem.label} allowClear maxLength={formItem.maxLength} {...formItem} />
+        return <Input placeholder={formItem.label} allowClear={true} maxLength={formItem.maxLength} {...formItem} />
       case 'select':
         return (
           <Select style={{ width: '100%' }} optionFilterProp="children" placeholder={formItem.label} {...formItem}>

@@ -11,5 +11,5 @@ export type ILoginParams = {
   captchaId: string
   password: string
   username: string
-  verifyCode: string
+  verifyCode?: string
 }
